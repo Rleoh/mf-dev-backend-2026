@@ -1,0 +1,30 @@
+@model mf_dev_backend_2026.Models.Veiculo
+
+<h1>Detalhes do Veículo</h1>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Nome</th>
+        <td>@Model.nome</td>
+    </tr>
+    <tr>
+        <th>Placa</th>
+        <td>@Model.placa</td>
+    </tr>
+    <tr>
+        <th>Ano Fabricação</th>
+        <td>@Model.AnoFabricacao</td>
+    </tr>
+    <tr>
+        <th>Ano Modelo</th>
+        <td>@Model.AnoModelo</td>
+    </tr>
+</table>
+
+<a asp-action="Edit" asp-route-id="@Model.id" class="btn btn-warning">
+    Editar
+</a>
+
+<a asp-action="Index" class="btn btn-secondary">
+    Voltar
+</a>

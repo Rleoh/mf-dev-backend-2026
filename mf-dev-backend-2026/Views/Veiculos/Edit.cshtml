@@ -1,0 +1,57 @@
+@model mf_dev_backend_2026.Models.Veiculo
+
+@{
+    ViewData["Title"] = "Editar Veículo";
+}
+
+<h1>Editar Veículo</h1>
+
+<div class="card p-4 shadow-sm">
+    <form asp-action="Edit">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="id" />
+
+        <div class="mb-3">
+            <label asp-for="nome" class="form-label"></label>
+            <input asp-for="nome" class="form-control" />
+            <span asp-validation-for="nome" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="placa" class="form-label"></label>
+            <input asp-for="placa" class="form-control" />
+            <span asp-validation-for="placa" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="AnoFabricacao" class="form-label"></label>
+            <input asp-for="AnoFabricacao" class="form-control" />
+            <span asp-validation-for="AnoFabricacao" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="AnoModelo" class="form-label"></label>
+            <input asp-for="AnoModelo" class="form-control" />
+            <span asp-validation-for="AnoModelo" class="text-danger"></span>
+        </div>
+
+        <div class="mt-3">
+            <button type="submit" class="btn btn-success">
+                Salvar
+            </button>
+
+            <a asp-action="Index" class="btn btn-secondary">
+                Voltar
+            </a>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
