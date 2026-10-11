@@ -1,7 +1,9 @@
 
+using mf_dev_backend_2026.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using mf_dev_backend_2026.Models;
+using System.Security.Claims;
 
 public class UsuariosController : Controller
 {
@@ -13,9 +15,65 @@ public class UsuariosController : Controller
     }
 
     // GET: USUARIOS
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Index()
     {
         return View(await _context.Usuarios.ToListAsync());
+    }
+
+    public IActionResult Login()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login(Usuario usuario)
+    {
+        var dados = await _context.Usuarios.FindAsync(usuario.id);
+
+
+        if (dados == null)
+        {
+            ViewBag.Message = "Usuário e/ou senha inválidos!";
+            return View();
+        }
+
+        bool senhaOk = BCrypt.Net.BCrypt.Verify(usuario.Senha, dados.Senha);
+
+        if (senhaOk)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, dados.Nome),
+                new Claim(ClaimTypes.NameIdentifier, dados.id.ToString()),
+                new Claim(ClaimTypes.Role, dados.Perfil.ToString())
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, "Login");
+            ClaimsPrincipal Principal = new ClaimsPrincipal(claimsIdentity);
+
+            var props = new AuthenticationProperties
+            {
+                AllowRefresh = true,
+                ExpiresUtc = DateTime.UtcNow.ToLocalTime().AddHours(8),
+                IsPersistent = true
+            };
+
+            await HttpContext.SignInAsync(Principal, props);
+            return Redirect("/");
+        }
+
+        else
+        {
+            ViewBag.Message = "Usuário e/ou senha inválidos!";
+        }
+
+        return View();
+    }
+
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync();
+        return RedirectToAction("Login", "Usuarios");
     }
 
     // GET: USUARIOS/Details/5
