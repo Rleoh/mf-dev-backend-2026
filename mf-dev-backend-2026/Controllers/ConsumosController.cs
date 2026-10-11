@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using mf_dev_backend_2026.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
-
+[Authorize]
 public class ConsumosController : Controller
 {
     private readonly AppDbContext _context;

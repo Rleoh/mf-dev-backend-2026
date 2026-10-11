@@ -1,10 +1,12 @@
 
 using mf_dev_backend_2026.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
+[Authorize(Roles = "Admin")] 
 public class UsuariosController : Controller
 {
     private readonly AppDbContext _context;
@@ -20,12 +22,20 @@ public class UsuariosController : Controller
         return View(await _context.Usuarios.ToListAsync());
     }
 
+    [AllowAnonymous]
     public IActionResult Login()
     {
         return View();
     }
 
+    [AllowAnonymous]
+    public IActionResult AcessDenied()
+    {
+        return View();
+    }
+
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Login(Usuario usuario)
     {
         var dados = await _context.Usuarios.FindAsync(usuario.id);
@@ -70,6 +80,7 @@ public class UsuariosController : Controller
         return View();
     }
 
+    [AllowAnonymous]
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync();
